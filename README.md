@@ -23,7 +23,7 @@ to the Test function, and is regenerated each Project Driver run.  <br />
 If golden_run is set to true, the old golden_prX_log_file.txt is overriden with a copy of the most recent  <br />
 Project Driver run's log file. Set golden_run to true for 1 Project Driver run once you're confident all tests are passing. 
 
-At the end of each Project Driver run, the diff command is run on the normal log file and the golden one.  <br />
+At the end of each Project Driver run, the diff command is run on the normal and gold log files.  <br />
 If the golden_log is correct and the log file doesn't match it, regression occurred. <br />
 
 Comments:
