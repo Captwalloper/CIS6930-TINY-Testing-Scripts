@@ -6,6 +6,7 @@ golden_log_file="golden_"$log_file
 
 one_at_a_time=false # pause between tests
 golden_run=false # declare this run as the gospel against which to run regression tests
+run_diff=false # compare most recent log to golden log
 
 #FUNCTIONS
 Log() { # In addition to sending stdout to console, append it to the logfile.
@@ -13,7 +14,7 @@ Log() { # In addition to sending stdout to console, append it to the logfile.
 }
 
 Instruct() { # Provide a reminder about what input/behavior is expected for a test.
-    Instruct_Helper $1
+    Instruct_Helper "$1"
 }
 
 Test() { # Compile and run the specified program; pass along any additional parameters; log everything 
@@ -47,7 +48,7 @@ Test c05; Show_Expected_Results 2
 Test c06; Show_Expected_Results -1
 Test c07; Show_Expected_Results 21
 Test c08; Show_Expected_Results $"1\n0\n0\n1\n0\n1\n"
-Instruct "TYPE 1, 2, 3, CTRL-d"; Test c09; Show_Expected_Results $"1\n2\n3\n3\n"
+Instruct "TYPE 1, 2, 3, CTRL-d"; Test c09; Show_Expected_Results $"1\n1\n2\n2\n3\n3\n3\n"
 Test c10; Show_Expected_Results $"1\n0\n1\n1\n1\n1\n"
 Test c11; Show_Expected_Results $"1000\n100\n200\n150\n3\n81\n"
 Test c12; Show_Expected_Results $"45\n30\n6\n-3\n20\n0\n0\n1\n0\n"
@@ -65,9 +66,12 @@ Test e07; Show_Expected_Results 'this program tests the equality/inequality oper
 Test e08; Show_Expected_Results 'this program tests the arithmetic operators. error: wrong type for operation lines(17,20,23,26)'
 
 #AFTERMATH
-printf "*******************************************************\n"
-printf "The difference between this run and the golden run was:\n"
-diff $log_file $golden_log_file
+if $run_diff
+then
+    printf "*******************************************************\n"
+    printf "The difference between this run and the golden run was:\n"
+    diff $log_file $golden_log_file
+fi
 
 if $golden_run;
 then # regenerate gold log file

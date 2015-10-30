@@ -21,8 +21,13 @@ Instruct_Helper() { # Provide a reminder about what input/behavior is expected f
 Test_Helper() { # Compile and run the specified program; pass along any additional parameters; log everything 
     printf "*********************************************""\n"  
     printf "$project"".""$1""\n"                                
-    printf "*********************************************""\n"  
-    echo "${@:2}" | ./tc tests/$project.$1                      
+    printf "*********************************************""\n"
+    if [ $# -eq 1 ] # no additional parameters supplied
+    then
+        ./tc tests/$project.$1 
+    else 
+        echo "${@:2}" | ./tc tests/$project.$1  
+    fi                     
 }
 
 # USE: TimeoutTest_Helper seconds programName programParam1 programParam2 ...

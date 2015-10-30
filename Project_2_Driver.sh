@@ -6,6 +6,7 @@ golden_log_file="golden_"$log_file
 
 one_at_a_time=false # pause between tests
 golden_run=false # declare this run as the gospel against which to run regression tests
+run_diff=false # compare most recent log to golden log
 
 #FUNCTIONS
 Log() { # In addition to sending stdout to console, append it to the logfile.
@@ -13,7 +14,7 @@ Log() { # In addition to sending stdout to console, append it to the logfile.
 }
 
 Instruct() { # Provide a reminder about what input/behavior is expected for a test.
-    Instruct_Helper $1
+    Instruct_Helper "$1"
 }
 
 Test() { # Compile and run the specified program; pass along any additional parameters; log everything 
@@ -79,9 +80,12 @@ Test e13; Show_Expected_Results $"error: Cannot exit from a for statement"
 #fail
 
 #AFTERMATH
-printf "*******************************************************\n"
-printf "The difference between this run and the golden run was:\n"
-diff $log_file $golden_log_file
+if $run_diff
+then
+    printf "*******************************************************\n"
+    printf "The difference between this run and the golden run was:\n"
+    diff $log_file $golden_log_file
+fi
 
 if $golden_run;
 then # regenerate gold log file
